@@ -123,17 +123,17 @@ export default function RegisterPage() {
       // Send email notification using EmailJS
       try {
         await emailjs.send(
-          "service_qh303g7", // Replace with your EmailJS service ID
-          "template_bes593s", // Replace with your EmailJS template ID
+          "service_qh303g7",
+          "template_bes593s",
           {
             to_name: "Admin",
-            from_name: formData.fullName,
-            from_email: formData.email,
+            full_name: formData.fullName,
+            email: formData.email,
             phone: formData.phone,
-            preferred_unit: formData.preferredUnit,
+            unit_type: formData.preferredUnit,
             message: formData.message,
           },
-          "5R7m9Lt_-i-F0LzsR" // Replace with your EmailJS public key
+          "5R7m9Lt_-i-F0LzsR"
         );
       } catch (emailError) {
         console.error("Failed to send email notification:", emailError);
