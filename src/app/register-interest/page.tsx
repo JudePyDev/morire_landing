@@ -56,7 +56,7 @@ export default function RegisterPage() {
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
-    severity: "success" as "success" | "error",
+    severity: "success" as "success" | "error" | "warning",
   });
   const router = useRouter();
 
@@ -105,6 +105,24 @@ export default function RegisterPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Validate form data
+    if (
+      !formData.fullName ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.preferredUnit
+    ) {
+      setSnackbar({
+        open: true,
+        message: "Please fill in all required fields",
+        severity: "error",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    console.log("Form submission started with data:", formData);
+
     try {
       // Send to Supabase
       const { error } = await supabase.from("registrations").insert([
@@ -122,21 +140,41 @@ export default function RegisterPage() {
 
       // Send email notification using EmailJS
       try {
-        await emailjs.send(
+        console.log("Sending email with data:", {
+          name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          unit: formData.preferredUnit,
+          message: formData.message,
+        });
+
+        const emailResult = await emailjs.send(
           "service_qh303g7",
-          "template_bes593s",
+          "template_3suvrq8",
           {
             to_name: "Admin",
-            full_name: formData.fullName,
-            email: formData.email,
+            name: formData.fullName,
+            from_email: formData.email,
             phone: formData.phone,
-            unit_type: formData.preferredUnit,
+            unit: formData.preferredUnit,
             message: formData.message,
+            user_name: formData.fullName,
+            preferred_unit: formData.preferredUnit,
           },
           "5R7m9Lt_-i-F0LzsR"
         );
+
+        console.log("EmailJS Response:", emailResult);
       } catch (emailError) {
-        console.error("Failed to send email notification:", emailError);
+        console.error(
+          "Failed to send email notification. Full error:",
+          emailError
+        );
+        setSnackbar({
+          open: true,
+          message: "Registration saved but email notification failed.",
+          severity: "warning",
+        });
       }
 
       router.push("/thank-you");
