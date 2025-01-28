@@ -3,11 +3,10 @@
 import { Box, Container, Typography, Grid, Card } from "@mui/material";
 import { motion, useScroll, useTransform } from "framer-motion";
 import SecurityIcon from "@mui/icons-material/Security";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import ParkIcon from "@mui/icons-material/Park";
-import PoolIcon from "@mui/icons-material/Pool";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import LocalParkingIcon from "@mui/icons-material/LocalParking";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import { useRef } from "react";
 
 interface Feature {
@@ -19,37 +18,33 @@ interface Feature {
 const features: Feature[] = [
   {
     icon: SecurityIcon,
-    title: "24/7 Security",
+    title: "Secure and Gated Community",
     description:
-      "Round-the-clock security with CCTV surveillance and trained personnel.",
+      "24/7 security with controlled access points and surveillance systems for your peace of mind.",
   },
   {
-    icon: LocationCityIcon,
-    title: "Modern Architecture",
+    icon: DirectionsCarIcon,
+    title: "Well-Paved Roads and Drainage",
     description:
-      "Contemporary design with premium finishes and sustainable materials.",
+      "Modern infrastructure with properly constructed roads and efficient drainage systems.",
+  },
+  {
+    icon: ElectricBoltIcon,
+    title: "Reliable Utilities",
+    description:
+      "Consistent electricity and water supply ensuring comfortable living conditions.",
   },
   {
     icon: ParkIcon,
-    title: "Green Spaces",
+    title: "Recreational Spaces",
     description:
-      "Beautifully landscaped gardens and recreational areas for families.",
+      "Beautiful green spaces and recreational facilities for leisure and community activities.",
   },
   {
-    icon: PoolIcon,
-    title: "Swimming Pool",
+    icon: LocalHospitalIcon,
+    title: "Essential Services",
     description:
-      "Resort-style pool with dedicated children's area and lounging deck.",
-  },
-  {
-    icon: FitnessCenterIcon,
-    title: "Fitness Center",
-    description: "State-of-the-art gym equipment and dedicated workout spaces.",
-  },
-  {
-    icon: LocalParkingIcon,
-    title: "Ample Parking",
-    description: "Secure parking spaces with visitor parking facilities.",
+      "Easy access to schools, hospitals, and markets for your daily convenience.",
   },
 ];
 

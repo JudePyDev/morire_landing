@@ -42,7 +42,11 @@ const initialFormState: RegisterFormData = {
   message: "",
 };
 
-const unitTypes = ["Premium Villa", "Family Terrace", "Executive Suite"];
+const unitTypes = [
+  "2 Bedroom Apartment",
+  "3 Bedroom Apartment",
+  "3 Bedroom Apartment with BQ",
+];
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState<RegisterFormData>(initialFormState);

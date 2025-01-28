@@ -206,7 +206,7 @@ const LoadingScreen = ({ onLoadingComplete }: LoadingScreenProps) => {
                   },
                 }}
               >
-                {"AbdulRahman AbdulRazak Housing Estate"
+                {"AbdulRahman AbdulRazaq Housing Estate"
                   .split(" ")
                   .map((word, i) => (
                     <motion.span

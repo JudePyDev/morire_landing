@@ -6,6 +6,7 @@ import { Box } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import AboutSection from "@/components/AboutSection";
 import UnitsSection from "@/components/UnitsSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import ContactSection from "@/components/ContactSection";
@@ -35,6 +36,7 @@ export default function Home() {
             <Box component="main">
               <Navbar />
               <HeroSection />
+              <AboutSection />
               <UnitsSection />
               <FeaturesSection />
               <ContactSection />
