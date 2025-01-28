@@ -25,6 +25,7 @@ import SendIcon from "@mui/icons-material/Send";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import emailjs from "@emailjs/browser";
 
 interface RegisterFormData {
   fullName: string;
@@ -105,6 +106,7 @@ export default function RegisterPage() {
     setIsSubmitting(true);
 
     try {
+      // Send to Supabase
       const { error } = await supabase.from("registrations").insert([
         {
           full_name: formData.fullName,
@@ -117,6 +119,25 @@ export default function RegisterPage() {
       ]);
 
       if (error) throw error;
+
+      // Send email notification using EmailJS
+      try {
+        await emailjs.send(
+          "service_qh303g7", // Replace with your EmailJS service ID
+          "template_bes593s", // Replace with your EmailJS template ID
+          {
+            to_name: "Admin",
+            from_name: formData.fullName,
+            from_email: formData.email,
+            phone: formData.phone,
+            preferred_unit: formData.preferredUnit,
+            message: formData.message,
+          },
+          "5R7m9Lt_-i-F0LzsR" // Replace with your EmailJS public key
+        );
+      } catch (emailError) {
+        console.error("Failed to send email notification:", emailError);
+      }
 
       router.push("/thank-you");
     } catch (error) {
