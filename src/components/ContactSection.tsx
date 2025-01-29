@@ -32,55 +32,127 @@ const initialFormState: ContactInfo = {
   message: "",
 };
 
+// Add proper typing for the ContactInfoCard props
+interface ContactInfoCardProps {
+  icon: React.ElementType;
+  title: string;
+  content: string;
+  link: string;
+}
+
 // Memoized contact info component for better performance
-const ContactInfoCard = memo(({ icon: Icon, title, content, link }: any) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-50px" }}
-    transition={{ duration: 0.5 }}
-  >
-    <Card
-      sx={{
-        p: 3,
-        height: "100%",
-        background: "rgba(255, 255, 255, 0.1)",
-        backdropFilter: "blur(10px)",
-        border: "1px solid rgba(255, 255, 255, 0.2)",
-        borderRadius: "16px",
-        transition: "all 0.3s ease",
-        willChange: "transform",
-        "&:hover": {
-          transform: "translateY(-5px)",
-          background: "rgba(255, 255, 255, 0.15)",
-        },
-      }}
+const ContactInfoCard = memo(
+  ({ icon: Icon, title, content, link }: ContactInfoCardProps) => (
+    <motion.div
+      initial={{ opacity: 0, x: 30 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+      style={{ willChange: "transform" }}
     >
       <Box
-        component="a"
+        component={motion.a}
         href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        whileHover={{ x: 10 }}
         sx={{
           display: "flex",
           alignItems: "center",
+          gap: 2,
           textDecoration: "none",
-          color: "inherit",
+          color: "white",
+          p: { xs: 1.5, md: 2 },
+          borderRadius: "15px",
+          background: "rgba(255, 255, 255, 0.1)",
+          transition: "all 0.3s ease",
+          willChange: "transform",
+          "&:hover": {
+            background: "rgba(255, 255, 255, 0.15)",
+          },
         }}
       >
-        <Icon sx={{ fontSize: "2rem", mr: 2, opacity: 0.9 }} />
+        <Icon sx={{ fontSize: { xs: "1.5rem", md: "2rem" } }} />
         <Box>
-          <Typography variant="subtitle1" sx={{ opacity: 0.9, mb: 0.5 }}>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              fontWeight: 600,
+              fontSize: { xs: "0.9rem", md: "1rem" },
+            }}
+          >
             {title}
           </Typography>
-          <Typography variant="body2" sx={{ opacity: 0.7 }}>
+          <Typography
+            variant="body2"
+            sx={{
+              opacity: 0.8,
+              fontSize: { xs: "0.8rem", md: "0.9rem" },
+            }}
+          >
             {content}
           </Typography>
         </Box>
       </Box>
-    </Card>
-  </motion.div>
-));
+    </motion.div>
+  )
+);
 
 ContactInfoCard.displayName = "ContactInfoCard";
+
+// Memoized form field component for better performance
+const FormField = memo(
+  ({
+    label,
+    name,
+    value,
+    onChange,
+    required = false,
+    multiline = false,
+    type = "text",
+    rows = undefined,
+  }: {
+    label: string;
+    name: string;
+    value: string;
+    onChange: (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => void;
+    required?: boolean;
+    multiline?: boolean;
+    type?: string;
+    rows?: number;
+  }) => (
+    <TextField
+      fullWidth
+      label={label}
+      name={name}
+      type={type}
+      value={value}
+      onChange={onChange}
+      required={required}
+      multiline={multiline}
+      rows={rows}
+      variant="outlined"
+      sx={{
+        "& .MuiOutlinedInput-root": {
+          color: "white",
+          "& fieldset": {
+            borderColor: "rgba(255, 255, 255, 0.3)",
+          },
+          "&:hover fieldset": {
+            borderColor: "rgba(255, 255, 255, 0.5)",
+          },
+        },
+        "& .MuiInputLabel-root": {
+          color: "rgba(255, 255, 255, 0.7)",
+        },
+      }}
+    />
+  )
+);
+
+FormField.displayName = "FormField";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState<ContactInfo>(initialFormState);
@@ -197,15 +269,16 @@ const ContactSection = () => {
       />
 
       <Container maxWidth="xl">
-        <motion.div style={{ opacity, y }}>
+        <motion.div style={{ opacity, y, willChange: "transform" }}>
           <Grid container spacing={4}>
             {/* Contact Form */}
             <Grid item xs={12} md={6} order={{ xs: 2, md: 1 }}>
               <motion.div
-                initial={{ opacity: 0, x: -30 }}
+                initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                style={{ willChange: "transform" }}
               >
                 <Box
                   component="form"
@@ -231,83 +304,34 @@ const ContactSection = () => {
 
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
-                      <TextField
-                        fullWidth
+                      <FormField
                         label="Name"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        variant="outlined"
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            color: "white",
-                            "& fieldset": {
-                              borderColor: "rgba(255, 255, 255, 0.3)",
-                            },
-                            "&:hover fieldset": {
-                              borderColor: "rgba(255, 255, 255, 0.5)",
-                            },
-                          },
-                          "& .MuiInputLabel-root": {
-                            color: "rgba(255, 255, 255, 0.7)",
-                          },
-                        }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
+                      <FormField
                         label="Email"
                         name="email"
                         type="email"
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        variant="outlined"
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            color: "white",
-                            "& fieldset": {
-                              borderColor: "rgba(255, 255, 255, 0.3)",
-                            },
-                            "&:hover fieldset": {
-                              borderColor: "rgba(255, 255, 255, 0.5)",
-                            },
-                          },
-                          "& .MuiInputLabel-root": {
-                            color: "rgba(255, 255, 255, 0.7)",
-                          },
-                        }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
+                      <FormField
                         label="Phone"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        variant="outlined"
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            color: "white",
-                            "& fieldset": {
-                              borderColor: "rgba(255, 255, 255, 0.3)",
-                            },
-                            "&:hover fieldset": {
-                              borderColor: "rgba(255, 255, 255, 0.5)",
-                            },
-                          },
-                          "& .MuiInputLabel-root": {
-                            color: "rgba(255, 255, 255, 0.7)",
-                          },
-                        }}
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <TextField
-                        fullWidth
+                      <FormField
                         label="Message"
                         name="message"
                         value={formData.message}
@@ -315,73 +339,90 @@ const ContactSection = () => {
                         required
                         multiline
                         rows={4}
-                        variant="outlined"
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            color: "white",
-                            "& fieldset": {
-                              borderColor: "rgba(255, 255, 255, 0.3)",
-                            },
-                            "&:hover fieldset": {
-                              borderColor: "rgba(255, 255, 255, 0.5)",
-                            },
-                          },
-                          "& .MuiInputLabel-root": {
-                            color: "rgba(255, 255, 255, 0.7)",
-                          },
-                        }}
                       />
                     </Grid>
                   </Grid>
 
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disabled={isSubmitting}
-                    endIcon={<SendIcon />}
-                    sx={{
-                      mt: 3,
-                      py: 1.5,
-                      px: 4,
-                      borderRadius: "12px",
-                      background: "white",
-                      color: "primary.main",
-                      "&:hover": {
-                        background: "rgba(255, 255, 255, 0.9)",
-                      },
-                    }}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{ willChange: "transform" }}
                   >
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                  </Button>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      fullWidth
+                      size="large"
+                      disabled={isSubmitting}
+                      endIcon={
+                        <motion.div
+                          animate={isSubmitting ? { rotate: 360 } : {}}
+                          transition={{ duration: 1, repeat: Infinity }}
+                          style={{ willChange: "transform" }}
+                        >
+                          <SendIcon />
+                        </motion.div>
+                      }
+                      sx={{
+                        mt: 3,
+                        py: { xs: 1.5, md: 2 },
+                        borderRadius: "15px",
+                        textTransform: "none",
+                        fontSize: { xs: "1rem", md: "1.1rem" },
+                        fontWeight: 500,
+                        background:
+                          "linear-gradient(45deg, #2D6A4F 30%, #40916C 90%)",
+                        boxShadow: "none",
+                        "&:hover": {
+                          boxShadow: "0 6px 20px rgba(45, 106, 79, 0.4)",
+                        },
+                      }}
+                    >
+                      {isSubmitting ? "Sending..." : "Send Message"}
+                    </Button>
+                  </motion.div>
                 </Box>
               </motion.div>
             </Grid>
 
             {/* Contact Information */}
             <Grid item xs={12} md={6} order={{ xs: 1, md: 2 }}>
-              <Box sx={{ pl: { md: 4 } }}>
+              <Box sx={{ pl: { xs: 0, md: 6 }, mb: { xs: 4, md: 0 } }}>
                 <motion.div
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                  style={{ willChange: "transform" }}
                 >
                   <Typography
-                    variant="h3"
+                    variant="h2"
                     sx={{
-                      mb: { xs: 3, md: 4 },
-                      fontFamily: "var(--font-cormorant)",
-                      fontSize: { xs: "2rem", md: "2.5rem" },
+                      mb: { xs: 2, md: 4 },
+                      fontSize: { xs: "1.75rem", md: "2.5rem" },
+                      fontFamily: '"Playfair Display", serif',
                       textAlign: { xs: "center", md: "left" },
                     }}
                   >
-                    Contact Information
+                    Let's Connect
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      mb: { xs: 4, md: 6 },
+                      opacity: 0.8,
+                      fontSize: { xs: "1rem", md: "1.1rem" },
+                      textAlign: { xs: "center", md: "left" },
+                    }}
+                  >
+                    Ready to find your dream home? Reach out to us and let's
+                    make it happen.
                   </Typography>
                 </motion.div>
 
-                <Grid container spacing={3}>
+                <Grid container spacing={2}>
                   {contactInfo.map((info, index) => (
-                    <Grid item xs={12} key={info.title}>
+                    <Grid item xs={12} key={index}>
                       <ContactInfoCard {...info} />
                     </Grid>
                   ))}
