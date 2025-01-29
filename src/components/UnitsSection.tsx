@@ -60,29 +60,30 @@ const UnitsSection = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.1,
+        delayChildren: 0.1,
       },
     },
   };
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.8,
-        ease: [0.2, 0.65, 0.3, 0.9],
+        duration: 0.5,
+        ease: "easeOut",
       },
     },
   };
 
   const imageVariants = {
     hover: {
-      scale: 1.1,
+      scale: 1.05,
       transition: {
-        duration: 0.4,
-        ease: "easeInOut",
+        duration: 0.3,
+        ease: "easeOut",
       },
     },
   };
@@ -142,6 +143,8 @@ const UnitsSection = () => {
         background: "linear-gradient(180deg, #F8FAF9 0%, #FFFFFF 100%)",
         position: "relative",
         overflow: "hidden",
+        willChange: "transform",
+        backfaceVisibility: "hidden",
       }}
     >
       {/* Background Elements */}
@@ -202,6 +205,7 @@ const UnitsSection = () => {
                 mb: { xs: 1.5, sm: 2 },
                 fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
                 fontFamily: "var(--font-cormorant)",
+                lineHeight: 1.2,
               }}
             >
               Available Units
@@ -225,10 +229,10 @@ const UnitsSection = () => {
 
         {/* Units Grid */}
         <motion.div
-          variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
         >
           <Grid container spacing={{ xs: 4, sm: 6, md: 8 }}>
             {units.map((unit, index) => (
@@ -250,6 +254,7 @@ const UnitsSection = () => {
                       borderColor: "rgba(255, 255, 255, 0.3)",
                       transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                       minHeight: { xs: "500px", md: "550px" },
+                      willChange: "transform",
                       "&:hover": {
                         transform: "translateY(-8px)",
                         borderColor: "rgba(27, 67, 50, 0.3)",
@@ -280,15 +285,26 @@ const UnitsSection = () => {
                         },
                       }}
                     >
-                      <Image
-                        src={unit.image}
-                        alt={unit.name}
-                        fill
+                      <motion.div
+                        variants={imageVariants}
+                        whileHover="hover"
                         style={{
-                          objectFit: "cover",
-                          opacity: 0.3,
+                          width: "100%",
+                          height: "100%",
+                          willChange: "transform",
                         }}
-                      />
+                      >
+                        <Image
+                          src={unit.image}
+                          alt={unit.name}
+                          fill
+                          style={{
+                            objectFit: "cover",
+                          }}
+                          sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
+                          priority={unit.id === 1}
+                        />
+                      </motion.div>
                     </Box>
 
                     <Box

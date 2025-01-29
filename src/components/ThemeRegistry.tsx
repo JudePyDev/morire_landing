@@ -11,53 +11,62 @@ interface ThemeRegistryProps {
 
 const theme = createTheme({
   typography: {
-    fontFamily: "var(--font-inter), sans-serif",
+    fontFamily: "var(--font-playfair), serif",
     h1: {
       fontFamily: "var(--font-cormorant), serif",
       fontWeight: 600,
+      lineHeight: 1.2,
     },
     h2: {
       fontFamily: "var(--font-cormorant), serif",
       fontWeight: 600,
+      lineHeight: 1.2,
     },
     h3: {
       fontFamily: "var(--font-cormorant), serif",
       fontWeight: 600,
+      lineHeight: 1.3,
     },
     h4: {
       fontFamily: "var(--font-cormorant), serif",
       fontWeight: 600,
+      lineHeight: 1.3,
     },
     h5: {
       fontFamily: "var(--font-cormorant), serif",
       fontWeight: 500,
+      lineHeight: 1.4,
     },
     h6: {
       fontFamily: "var(--font-cormorant), serif",
       fontWeight: 500,
+      lineHeight: 1.4,
     },
     subtitle1: {
-      fontFamily: "var(--font-inter), sans-serif",
+      fontFamily: "var(--font-playfair), serif",
       fontWeight: 500,
+      lineHeight: 1.5,
     },
     subtitle2: {
-      fontFamily: "var(--font-inter), sans-serif",
+      fontFamily: "var(--font-playfair), serif",
       fontWeight: 500,
+      lineHeight: 1.5,
     },
     body1: {
-      fontFamily: "var(--font-inter), sans-serif",
+      fontFamily: "var(--font-playfair), serif",
       fontWeight: 400,
-      lineHeight: 1.7,
+      lineHeight: 1.6,
     },
     body2: {
-      fontFamily: "var(--font-inter), sans-serif",
+      fontFamily: "var(--font-playfair), serif",
       fontWeight: 400,
       lineHeight: 1.6,
     },
     button: {
-      fontFamily: "var(--font-inter), sans-serif",
+      fontFamily: "var(--font-playfair), serif",
       fontWeight: 500,
       textTransform: "none",
+      letterSpacing: 0.5,
     },
   },
   palette: {

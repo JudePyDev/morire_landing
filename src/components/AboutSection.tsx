@@ -39,9 +39,10 @@ export default function AboutSection() {
                 variant="h2"
                 color="primary"
                 sx={{
-                  mb: { xs: 3, md: 4 },
-                  fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" },
+                  mb: { xs: 2.5, md: 3 },
+                  fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
                   fontFamily: "var(--font-cormorant)",
+                  lineHeight: 1.2,
                 }}
               >
                 About Morire
@@ -51,9 +52,10 @@ export default function AboutSection() {
                 variant="body1"
                 sx={{
                   color: "text.secondary",
-                  mb: 6,
-                  fontSize: { xs: "1.2rem", sm: "1.3rem", md: "1.4rem" },
-                  lineHeight: 1.8,
+                  mb: 4,
+                  fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" },
+                  lineHeight: 1.6,
+                  fontFamily: "var(--font-playfair)",
                 }}
               >
                 Encounter the ultimate living at Morire City, a breathtaking
@@ -68,10 +70,11 @@ export default function AboutSection() {
                 color="primary"
                 align="center"
                 sx={{
-                  mb: 4,
+                  mb: 3,
                   fontFamily: "var(--font-cormorant)",
-                  fontSize: { xs: "1.8rem", sm: "2rem", md: "2.2rem" },
+                  fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
                   width: "100%",
+                  lineHeight: 1.3,
                 }}
               >
                 Nearby Landmarks
@@ -80,67 +83,79 @@ export default function AboutSection() {
               <List sx={{ mb: 4 }}>
                 <ListItem
                   sx={{
-                    py: 2,
+                    py: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
                       backgroundColor: "rgba(27, 67, 50, 0.05)",
                       borderRadius: "12px",
+                      transform: "translateX(8px)",
                     },
                   }}
                 >
                   <ListItemIcon>
-                    <SchoolIcon color="primary" sx={{ fontSize: "2rem" }} />
+                    <SchoolIcon color="primary" sx={{ fontSize: "1.75rem" }} />
                   </ListItemIcon>
                   <ListItemText
                     primary="Federal Polytechnic Offa"
                     primaryTypographyProps={{
-                      fontSize: { xs: "1.3rem", sm: "1.4rem", md: "1.5rem" },
+                      fontSize: { xs: "1.1rem", sm: "1.2rem", md: "1.3rem" },
                       fontWeight: 500,
                       color: "primary.main",
+                      fontFamily: "var(--font-playfair)",
                     }}
                   />
                 </ListItem>
                 <ListItem
                   sx={{
-                    py: 2,
+                    py: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
                       backgroundColor: "rgba(27, 67, 50, 0.05)",
                       borderRadius: "12px",
+                      transform: "translateX(8px)",
                     },
                   }}
                 >
                   <ListItemIcon>
                     <LocalHospitalIcon
                       color="primary"
-                      sx={{ fontSize: "2rem" }}
+                      sx={{ fontSize: "1.75rem" }}
                     />
                   </ListItemIcon>
                   <ListItemText
                     primary="Health Tech College of Medicine"
                     primaryTypographyProps={{
-                      fontSize: { xs: "1.3rem", sm: "1.4rem", md: "1.5rem" },
+                      fontSize: { xs: "1.1rem", sm: "1.2rem", md: "1.3rem" },
                       fontWeight: 500,
                       color: "primary.main",
+                      fontFamily: "var(--font-playfair)",
                     }}
                   />
                 </ListItem>
                 <ListItem
                   sx={{
-                    py: 2,
+                    py: 1.5,
+                    transition: "all 0.3s ease",
                     "&:hover": {
                       backgroundColor: "rgba(27, 67, 50, 0.05)",
                       borderRadius: "12px",
+                      transform: "translateX(8px)",
                     },
                   }}
                 >
                   <ListItemIcon>
-                    <StorefrontIcon color="primary" sx={{ fontSize: "2rem" }} />
+                    <StorefrontIcon
+                      color="primary"
+                      sx={{ fontSize: "1.75rem" }}
+                    />
                   </ListItemIcon>
                   <ListItemText
                     primary="Kara Market"
                     primaryTypographyProps={{
-                      fontSize: { xs: "1.3rem", sm: "1.4rem", md: "1.5rem" },
+                      fontSize: { xs: "1.1rem", sm: "1.2rem", md: "1.3rem" },
                       fontWeight: 500,
                       color: "primary.main",
+                      fontFamily: "var(--font-playfair)",
                     }}
                   />
                 </ListItem>
