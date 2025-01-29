@@ -6,9 +6,21 @@ import Image from "next/image";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export default function HeroSection() {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 150]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const { scrollY } = useScroll({
+    layoutEffect: false,
+  });
+
+  const y = useTransform(scrollY, [0, 500], [0, 150], {
+    clamp: true,
+  });
+
+  const opacity = useTransform(scrollY, [0, 300], [1, 0], {
+    clamp: true,
+  });
+
+  // Reduce number of animated background elements on mobile
+  const numBackgroundElements =
+    typeof window !== "undefined" && window.innerWidth < 768 ? 3 : 5;
 
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -19,6 +31,7 @@ export default function HeroSection() {
         duration: 0.8,
         delay: i * 0.2,
         ease: [0.2, 0.65, 0.3, 0.9],
+        staggerChildren: 0.1,
       },
     }),
   };
@@ -28,6 +41,7 @@ export default function HeroSection() {
     visible: {
       opacity: 1,
       y: 0,
+      willChange: "transform, opacity",
     },
   };
 
@@ -62,15 +76,18 @@ export default function HeroSection() {
     <Box
       component="section"
       sx={{
-        minHeight: "100vh",
+        minHeight: { xs: "calc(100vh - 64px)", md: "100vh" },
         position: "relative",
         overflow: "hidden",
         background: "linear-gradient(180deg, #F8FAF9 0%, #FFFFFF 100%)",
         display: "flex",
         alignItems: "center",
+        willChange: "transform",
+        transformStyle: "preserve-3d",
+        backfaceVisibility: "hidden",
       }}
     >
-      {/* Animated Background Elements */}
+      {/* Background Elements */}
       <Box
         sx={{
           position: "absolute",
@@ -80,9 +97,11 @@ export default function HeroSection() {
           bottom: 0,
           overflow: "hidden",
           pointerEvents: "none",
+          transform: "translateZ(0)",
+          willChange: "transform",
         }}
       >
-        {[...Array(5)].map((_, i) => (
+        {[...Array(numBackgroundElements)].map((_, i) => (
           <Box
             key={i}
             sx={{
@@ -91,6 +110,8 @@ export default function HeroSection() {
               left: `${i * 20}%`,
               top: `${i * 15}%`,
               position: "absolute",
+              transform: "translateZ(0)",
+              willChange: "transform",
             }}
           >
             <motion.div
@@ -102,6 +123,7 @@ export default function HeroSection() {
                 filter: "blur(60px)",
                 width: "100%",
                 height: "100%",
+                willChange: "transform, opacity",
               }}
               animate={{
                 x: [0, 100, 0],
@@ -113,6 +135,16 @@ export default function HeroSection() {
                 duration: 10 + i * 2,
                 repeat: Infinity,
                 ease: "linear",
+                x: {
+                  duration: 10 + i * 2,
+                  repeat: Infinity,
+                  ease: "linear",
+                },
+                y: {
+                  duration: 8 + i * 2,
+                  repeat: Infinity,
+                  ease: "linear",
+                },
               }}
             />
           </Box>
@@ -139,17 +171,24 @@ export default function HeroSection() {
                 variant="h1"
                 color="primary"
                 sx={{
-                  fontSize: { xs: "2.5rem", sm: "3rem", md: "4rem" },
+                  fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem" },
                   fontFamily: "var(--font-cormorant)",
-                  mb: { xs: 2, md: 3 },
+                  mb: { xs: 1.5, md: 2 },
                   position: "relative",
                   display: "flex",
                   flexWrap: "wrap",
-                  gap: "0.2em",
+                  gap: { xs: "0.1em", md: "0.2em" },
                   justifyContent: { xs: "center", md: "flex-start" },
+                  lineHeight: 1.2,
                 }}
               >
-                <Box sx={{ display: "flex", gap: "0.1em", mb: 1 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: { xs: "0.05em", md: "0.1em" },
+                    mb: { xs: 0.5, md: 1 },
+                  }}
+                >
                   {welcomeText.map((letter, i) => (
                     <motion.span
                       key={i}
@@ -157,16 +196,18 @@ export default function HeroSection() {
                       initial="hidden"
                       animate="visible"
                       transition={{
-                        duration: 0.5,
-                        delay: i * 0.1,
-                        ease: [0.2, 0.65, 0.3, 0.9],
+                        duration: 0.3,
+                        delay: i * 0.05,
+                        ease: "easeOut",
                       }}
                     >
                       {letter === " " ? "\u00A0" : letter}
                     </motion.span>
                   ))}
                 </Box>
-                <Box sx={{ display: "flex", gap: "0.1em" }}>
+                <Box
+                  sx={{ display: "flex", gap: { xs: "0.05em", md: "0.1em" } }}
+                >
                   {morireText.map((letter, i) => (
                     <motion.span
                       key={i}
@@ -174,9 +215,9 @@ export default function HeroSection() {
                       initial="hidden"
                       animate="visible"
                       transition={{
-                        duration: 0.5,
-                        delay: 0.8 + i * 0.1,
-                        ease: [0.2, 0.65, 0.3, 0.9],
+                        duration: 0.3,
+                        delay: 0.4 + i * 0.05,
+                        ease: "easeOut",
                       }}
                       style={{
                         color: i < 6 ? "#1B4332" : "#2D6A4F",
@@ -200,10 +241,12 @@ export default function HeroSection() {
                 variant="h5"
                 color="text.secondary"
                 sx={{
-                  fontSize: { xs: "1.1rem", sm: "1.25rem", md: "1.5rem" },
-                  mb: { xs: 3, md: 4 },
+                  fontSize: { xs: "1rem", sm: "1.1rem", md: "1.25rem" },
+                  mb: { xs: 2.5, md: 3.5 },
                   maxWidth: "600px",
                   mx: { xs: "auto", md: 0 },
+                  lineHeight: { xs: 1.5, md: 1.6 },
+                  px: { xs: 2, md: 0 },
                   background:
                     "linear-gradient(45deg, #1B4332 30%, #2D6A4F 90%)",
                   WebkitBackgroundClip: "text",
@@ -274,6 +317,10 @@ export default function HeroSection() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1, delay: 0.5 }}
+              style={{
+                willChange: "transform, opacity",
+                backfaceVisibility: "hidden",
+              }}
             >
               <Box
                 sx={{
@@ -283,42 +330,56 @@ export default function HeroSection() {
                   borderRadius: { xs: "24px", md: "40px" },
                   overflow: "hidden",
                   boxShadow: "0 20px 40px rgba(27, 67, 50, 0.2)",
+                  transform: "translateZ(0)",
+                  willChange: "transform",
                   "& video": {
                     width: "100%",
                     height: "100%",
                     objectFit: "contain",
                     backgroundColor: "#000",
                     borderRadius: { xs: "24px", md: "40px" },
-                  },
-                  "& video::-webkit-media-controls": {
-                    backgroundColor: "rgba(27, 67, 50, 0.1)",
-                    borderRadius: "12px",
-                    padding: "0 8px",
-                  },
-                  "& video::-webkit-media-controls-panel": {
-                    backgroundColor: "transparent",
-                  },
-                  "& video::-webkit-media-controls-play-button": {
-                    backgroundColor: "#1B4332",
-                    borderRadius: "50%",
-                    color: "white",
+                    willChange: "transform",
+                    transform: "translateZ(0)",
                   },
                 }}
               >
                 <video
                   autoPlay
+                  muted
                   loop
                   playsInline
-                  controls
+                  preload="metadata"
+                  poster="/images/video-poster.jpg"
                   style={{
                     width: "100%",
                     height: "100%",
-                    objectFit: "contain",
+                    objectFit: "cover",
+                    transform: "translate3d(0,0,0)",
+                    backfaceVisibility: "hidden",
+                    perspective: 1000,
+                    WebkitTransform: "translate3d(0,0,0)",
+                    WebkitBackfaceVisibility: "hidden",
+                    WebkitPerspective: 1000,
                   }}
                 >
                   <source src="/videos/hero-video.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
                 </video>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background:
+                      "linear-gradient(180deg, rgba(27, 67, 50, 0.1) 0%, rgba(27, 67, 50, 0.05) 100%)",
+                    pointerEvents: "none",
+                    transform: "translate3d(0,0,0)",
+                    backfaceVisibility: "hidden",
+                    WebkitTransform: "translate3d(0,0,0)",
+                    WebkitBackfaceVisibility: "hidden",
+                  }}
+                />
               </Box>
             </motion.div>
           </Grid>
