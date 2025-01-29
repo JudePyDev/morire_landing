@@ -105,6 +105,7 @@ export default function HeroSection() {
 
   return (
     <Box
+      id="home"
       component="section"
       sx={{
         minHeight: { xs: "calc(100vh - 64px)", md: "100vh" },

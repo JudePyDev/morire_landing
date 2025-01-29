@@ -61,7 +61,11 @@ const Navbar = () => {
   const handleNavClick = (sectionId: string) => {
     setActiveSection(sectionId);
     const element = document.getElementById(
-      sectionId === "Contact Us" ? "contact" : sectionId.toLowerCase()
+      sectionId === "Contact Us"
+        ? "contact"
+        : sectionId === "Home"
+        ? "home"
+        : sectionId.toLowerCase()
     );
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
