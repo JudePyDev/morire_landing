@@ -9,14 +9,105 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  IconButton,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import SchoolIcon from "@mui/icons-material/School";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import StorefrontIcon from "@mui/icons-material/Storefront";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { useRef, useCallback } from "react";
+
+// Sample images array - replace with your actual images
+const carouselImages = [
+  {
+    src: "/images/about1.jpg",
+    alt: "Morire Estate View 1",
+  },
+  {
+    src: "/images/about2.jpg",
+    alt: "Morire Estate View 2",
+  },
+  {
+    src: "/images/about3.jpg",
+    alt: "Morire Estate View 3",
+  },
+  {
+    src: "/images/about4.jpg",
+    alt: "Morire Estate View 4",
+  },
+  {
+    src: "/images/about5.jpg",
+    alt: "Morire Estate View 5",
+  },
+  // Add more images as needed
+];
+
+const CustomArrow = ({
+  direction,
+  onClick,
+}: {
+  direction: "next" | "prev";
+  onClick?: () => void;
+}) => (
+  <IconButton
+    onClick={onClick}
+    sx={{
+      position: "absolute",
+      top: "50%",
+      transform: "translateY(-50%)",
+      zIndex: 2,
+      backgroundColor: "rgba(255, 255, 255, 0.9) !important",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+      width: { xs: 40, md: 48 },
+      height: { xs: 40, md: 48 },
+      ...(direction === "next"
+        ? { right: { xs: 10, md: 20 } }
+        : { left: { xs: 10, md: 20 } }),
+      "&:hover": {
+        backgroundColor: "white !important",
+        transform: "translateY(-50%) scale(1.1)",
+      },
+    }}
+  >
+    {direction === "next" ? (
+      <ArrowForwardIcon color="primary" />
+    ) : (
+      <ArrowBackIcon color="primary" />
+    )}
+  </IconButton>
+);
 
 export default function AboutSection() {
+  const sliderRef = useRef<Slider>(null);
+
+  const next = useCallback(() => {
+    sliderRef.current?.slickNext();
+  }, []);
+
+  const previous = useCallback(() => {
+    sliderRef.current?.slickPrev();
+  }, []);
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    pauseOnHover: true,
+    arrows: false,
+    fade: true,
+    dotsClass: "slick-dots custom-dots",
+  };
+
   return (
     <Box
       component="section"
@@ -27,10 +118,82 @@ export default function AboutSection() {
     >
       <Container maxWidth="xl">
         <Grid container spacing={{ xs: 4, md: 8 }} alignItems="center">
-          {/* Text Content */}
+          {/* Image Carousel */}
           <Grid item xs={12} md={6}>
             <motion.div
               initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  borderRadius: "24px",
+                  overflow: "hidden",
+                  boxShadow: "0 20px 40px rgba(27, 67, 50, 0.1)",
+                  "&:hover .carousel-arrows": {
+                    opacity: 1,
+                  },
+                  "& .slick-dots": {
+                    bottom: 20,
+                    "& li": {
+                      mx: 1,
+                      "& button": {
+                        "&:before": {
+                          fontSize: 12,
+                          color: "white",
+                          opacity: 0.7,
+                        },
+                      },
+                      "&.slick-active button:before": {
+                        opacity: 1,
+                      },
+                    },
+                  },
+                }}
+              >
+                <Slider ref={sliderRef} {...settings}>
+                  {carouselImages.map((image, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        position: "relative",
+                        paddingTop: "75%", // 4:3 aspect ratio for bigger images
+                        height: { xs: "300px", sm: "400px", md: "500px" },
+                      }}
+                    >
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        style={{
+                          objectFit: "cover",
+                        }}
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        priority={index === 0}
+                      />
+                    </Box>
+                  ))}
+                </Slider>
+                <Box
+                  className="carousel-arrows"
+                  sx={{
+                    opacity: { xs: 1, md: 0 },
+                    transition: "opacity 0.3s ease",
+                  }}
+                >
+                  <CustomArrow direction="prev" onClick={previous} />
+                  <CustomArrow direction="next" onClick={next} />
+                </Box>
+              </Box>
+            </motion.div>
+          </Grid>
+
+          {/* Text Content */}
+          <Grid item xs={12} md={6}>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
@@ -160,46 +323,6 @@ export default function AboutSection() {
                   />
                 </ListItem>
               </List>
-            </motion.div>
-          </Grid>
-
-          {/* Image */}
-          <Grid item xs={12} md={6}>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <Box
-                sx={{
-                  position: "relative",
-                  height: { xs: "300px", sm: "400px", md: "500px" },
-                  borderRadius: { xs: "24px", md: "40px" },
-                  overflow: "hidden",
-                  boxShadow: "0 20px 40px rgba(27, 67, 50, 0.2)",
-                }}
-              >
-                <Image
-                  src="/images/governor-image.jpg"
-                  alt="Governor"
-                  fill
-                  style={{ objectFit: "cover" }}
-                />
-                {/* Gradient Overlay */}
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background:
-                      "linear-gradient(180deg, rgba(27, 67, 50, 0.2) 0%, rgba(27, 67, 50, 0.4) 100%)",
-                    zIndex: 1,
-                  }}
-                />
-              </Box>
             </motion.div>
           </Grid>
         </Grid>

@@ -1,0 +1,105 @@
+/* Carousel Styles */
+.custom-dots {
+  position: absolute;
+  bottom: 20px;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.custom-dots li {
+  position: relative;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 5px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.custom-dots li button {
+  font-size: 0;
+  line-height: 0;
+  display: block;
+  width: 12px;
+  height: 12px;
+  padding: 5px;
+  cursor: pointer;
+  color: transparent;
+  border: 0;
+  outline: none;
+  background: transparent;
+}
+
+.custom-dots li button:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.custom-dots li.slick-active button:before {
+  background-color: white;
+  transform: scale(1.2);
+}
+
+/* Optimize carousel transitions */
+.slick-slide > div {
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.slick-current > div {
+  transform: scale(1);
+}
+
+.slick-slide img {
+  transition: transform 0.3s ease;
+}
+
+/* Add smooth fade transition */
+.slick-fade .slick-slide {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.slick-fade .slick-current {
+  opacity: 1;
+}
+
+/* Background Animations */
+@keyframes moveBackground {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 30px 30px;
+  }
+}
+
+@keyframes pulseGrid {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+/* Enhance transitions */
+.slick-slide {
+  transition: all 0.3s ease-out;
+}

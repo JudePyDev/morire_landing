@@ -217,7 +217,7 @@ const ContactSection = () => {
       icon: EmailIcon,
       title: "Email",
       content: "info@morire.com",
-      link: "mailto:info@morire.com",
+      link: "mailto:correspondentilr@ishihomes.com.ng",
     },
     {
       icon: PhoneIcon,

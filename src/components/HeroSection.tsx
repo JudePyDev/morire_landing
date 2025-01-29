@@ -20,7 +20,38 @@ export default function HeroSection() {
 
   // Reduce number of animated background elements on mobile
   const numBackgroundElements =
-    typeof window !== "undefined" && window.innerWidth < 768 ? 3 : 5;
+    typeof window !== "undefined" && window.innerWidth < 768 ? 4 : 8;
+
+  // Background patterns
+  const patterns = [
+    {
+      size: { xs: "150px", md: "300px" },
+      color: "rgba(27, 67, 50, 0.08)",
+      blur: "40px",
+      animation: {
+        duration: { base: 15, random: 5 },
+        scale: [1, 1.2],
+      },
+    },
+    {
+      size: { xs: "100px", md: "200px" },
+      color: "rgba(45, 106, 79, 0.06)",
+      blur: "30px",
+      animation: {
+        duration: { base: 12, random: 4 },
+        scale: [0.8, 1],
+      },
+    },
+    {
+      size: { xs: "80px", md: "150px" },
+      color: "rgba(64, 145, 108, 0.05)",
+      blur: "20px",
+      animation: {
+        duration: { base: 10, random: 3 },
+        scale: [1.2, 1],
+      },
+    },
+  ];
 
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -79,12 +110,44 @@ export default function HeroSection() {
         minHeight: { xs: "calc(100vh - 64px)", md: "100vh" },
         position: "relative",
         overflow: "hidden",
-        background: "linear-gradient(180deg, #F8FAF9 0%, #FFFFFF 100%)",
+        background:
+          "linear-gradient(135deg, #E8F0ED 0%, #F5F9F7 50%, #E5EEE9 100%)",
         display: "flex",
         alignItems: "center",
         willChange: "transform",
         transformStyle: "preserve-3d",
         backfaceVisibility: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            radial-gradient(circle at 20% 30%, rgba(27, 67, 50, 0.08) 0%, transparent 60%),
+            radial-gradient(circle at 80% 70%, rgba(45, 106, 79, 0.08) 0%, transparent 60%),
+            radial-gradient(circle at 50% 50%, rgba(64, 145, 108, 0.06) 0%, transparent 70%)
+          `,
+          pointerEvents: "none",
+        },
+        "&::after": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            linear-gradient(45deg, rgba(27, 67, 50, 0.04) 25%, transparent 25%) -50px 0,
+            linear-gradient(-45deg, rgba(27, 67, 50, 0.04) 25%, transparent 25%) -50px 0,
+            linear-gradient(45deg, transparent 75%, rgba(27, 67, 50, 0.04) 75%) -50px 0,
+            linear-gradient(-45deg, transparent 75%, rgba(27, 67, 50, 0.04) 75%) -50px 0
+          `,
+          backgroundSize: "100px 100px",
+          opacity: 0.7,
+          pointerEvents: "none",
+        },
       }}
     >
       {/* Background Elements */}
@@ -99,57 +162,88 @@ export default function HeroSection() {
           pointerEvents: "none",
           transform: "translateZ(0)",
           willChange: "transform",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "url('/images/pattern-dot.png')",
+            backgroundSize: "30px 30px",
+            opacity: 0.4,
+            animation: "moveBackground 30s linear infinite",
+          },
         }}
       >
-        {[...Array(numBackgroundElements)].map((_, i) => (
-          <Box
-            key={i}
-            sx={{
-              width: { xs: "200px", md: "400px" },
-              height: { xs: "200px", md: "400px" },
-              left: `${i * 20}%`,
-              top: `${i * 15}%`,
-              position: "absolute",
-              transform: "translateZ(0)",
-              willChange: "transform",
-            }}
-          >
-            <motion.div
-              style={{
+        {[...Array(numBackgroundElements)].map((_, i) => {
+          const patternIndex = i % patterns.length;
+          const pattern = patterns[patternIndex];
+          const randomDelay = Math.random() * 2;
+          const randomDuration =
+            pattern.animation.duration.base +
+            Math.random() * pattern.animation.duration.random;
+
+          return (
+            <Box
+              key={i}
+              sx={{
+                width: pattern.size,
+                height: pattern.size,
+                left: `${(i * 100) / numBackgroundElements}%`,
+                top: `${Math.random() * 100}%`,
                 position: "absolute",
-                background:
-                  "linear-gradient(45deg, rgba(27, 67, 50, 0.1), rgba(45, 106, 79, 0.05))",
-                borderRadius: "50%",
-                filter: "blur(60px)",
-                width: "100%",
-                height: "100%",
-                willChange: "transform, opacity",
+                transform: "translateZ(0)",
+                willChange: "transform",
               }}
-              animate={{
-                x: [0, 100, 0],
-                y: [0, 50, 0],
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{
-                duration: 10 + i * 2,
-                repeat: Infinity,
-                ease: "linear",
-                x: {
-                  duration: 10 + i * 2,
+            >
+              <motion.div
+                style={{
+                  position: "absolute",
+                  background: `radial-gradient(circle at center, ${pattern.color}, transparent)`,
+                  borderRadius: "50%",
+                  filter: `blur(${pattern.blur})`,
+                  width: "100%",
+                  height: "100%",
+                  willChange: "transform, opacity",
+                }}
+                animate={{
+                  x: [0, 50, 0],
+                  y: [0, 30, 0],
+                  scale: pattern.animation.scale,
+                  opacity: [0.6, 0.9, 0.6],
+                }}
+                transition={{
+                  duration: randomDuration,
+                  delay: randomDelay,
                   repeat: Infinity,
                   ease: "linear",
-                },
-                y: {
-                  duration: 8 + i * 2,
-                  repeat: Infinity,
-                  ease: "linear",
-                },
-              }}
-            />
-          </Box>
-        ))}
+                  times: [0, 0.5, 1],
+                }}
+              />
+            </Box>
+          );
+        })}
       </Box>
+
+      {/* Subtle Grid Pattern */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `
+            linear-gradient(rgba(27, 67, 50, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(27, 67, 50, 0.05) 1px, transparent 1px)
+          `,
+          backgroundSize: { xs: "20px 20px", md: "30px 30px" },
+          opacity: 0.5,
+          pointerEvents: "none",
+          animation: "pulseGrid 10s ease-in-out infinite",
+        }}
+      />
 
       <Container maxWidth="xl" sx={{ py: { xs: 8, md: 0 } }}>
         <Grid
@@ -332,11 +426,15 @@ export default function HeroSection() {
                   boxShadow: "0 20px 40px rgba(27, 67, 50, 0.2)",
                   transform: "translateZ(0)",
                   willChange: "transform",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#000",
                   "& video": {
                     width: "100%",
-                    height: "100%",
+                    height: "auto",
+                    maxHeight: "100%",
                     objectFit: "contain",
-                    backgroundColor: "#000",
                     borderRadius: { xs: "24px", md: "40px" },
                     willChange: "transform",
                     transform: "translateZ(0)",
@@ -347,13 +445,15 @@ export default function HeroSection() {
                   autoPlay
                   muted
                   loop
+                  controls
                   playsInline
                   preload="metadata"
                   poster="/images/video-poster.jpg"
                   style={{
                     width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
+                    height: "auto",
+                    maxHeight: "100%",
+                    objectFit: "contain",
                     transform: "translate3d(0,0,0)",
                     backfaceVisibility: "hidden",
                     perspective: 1000,
@@ -363,6 +463,7 @@ export default function HeroSection() {
                   }}
                 >
                   <source src="/videos/hero-video.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
                 </video>
                 <Box
                   sx={{
